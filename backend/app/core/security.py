@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db.database import get_db
 from app.db.models import User
+from app.core.firebase_config import verify_firebase_token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
@@ -40,6 +41,34 @@ async def get_current_user(
     db: Session = Depends(get_db)
 ) -> User:
     token = credentials.credentials
+
+    # Essayer de vérifier le token Firebase
+    firebase_payload = verify_firebase_token(token)
+
+    if firebase_payload:
+        # C'est un token Firebase valide
+        firebase_uid = firebase_payload.get("uid")
+        email = firebase_payload.get("email")
+        name = firebase_payload.get("name") or email
+
+        # Chercher l'utilisateur par email
+        user = db.query(User).filter(User.email == email).first()
+
+        # Si l'utilisateur n'existe pas, le créer automatiquement
+        if not user:
+            user = User(
+                email=email,
+                name=name,
+                hashed_password=""  # Pas besoin de mot de passe pour Firebase
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            print(f"✅ Nouvel utilisateur Firebase créé: {email}")
+
+        return user
+
+    # Si ce n'est pas un token Firebase, essayer JWT classique (fallback)
     payload = decode_access_token(token)
     if payload is None:
         raise HTTPException(
@@ -47,6 +76,7 @@ async def get_current_user(
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     user_id: int = payload.get("sub")
     if user_id is None:
         raise HTTPException(
@@ -54,6 +84,7 @@ async def get_current_user(
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         raise HTTPException(

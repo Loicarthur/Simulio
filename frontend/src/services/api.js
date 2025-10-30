@@ -10,10 +10,10 @@ const api = axios.create({
   },
 });
 
-// Intercepteur pour ajouter le token à chaque requête
+// Intercepteur pour ajouter le token Firebase à chaque requête
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('firebaseToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -23,12 +23,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// Auth API
-export const authAPI = {
-  login: (email, password) => api.post('/auth/login', { email, password }),
-  register: (name, email, password) => api.post('/auth/register', { name, email, password }),
-};
 
 // Clients API
 export const clientsAPI = {

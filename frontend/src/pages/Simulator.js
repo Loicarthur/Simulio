@@ -93,6 +93,7 @@ export default function Simulator() {
 
   useEffect(() => {
     calculateSimulation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   return (

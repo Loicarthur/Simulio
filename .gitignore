@@ -18,6 +18,11 @@ build/
 .env.local
 .env.*.local
 
+# Firebase
+backend/firebase-service-account.json
+frontend/.env
+frontend/.env.local
+
 # Database
 *.db
 *.sqlite3

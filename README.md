@@ -1,6 +1,6 @@
-# Simulio - Simulateur Immobilier
+# Simulio - Simulateur Immobilier 🔥
 
-Application web complète de simulation de prêt immobilier avec gestion des clients et des simulations.
+Application web complète de simulation de prêt immobilier avec **Firebase Authentication**, gestion des clients et des simulations.
 
 ## 📋 Table des matières
 
@@ -8,10 +8,10 @@ Application web complète de simulation de prêt immobilier avec gestion des cli
 - [Fonctionnalités](#fonctionnalités)
 - [Prérequis](#prérequis)
 - [Installation](#installation)
+- [Configuration Firebase](#configuration-firebase)
 - [Utilisation](#utilisation)
 - [Architecture](#architecture)
 - [Fonctionnalités BONUS](#fonctionnalités-bonus)
-- [API Documentation](#api-documentation)
 
 ## 🛠️ Technologies utilisées
 
@@ -20,13 +20,13 @@ Application web complète de simulation de prêt immobilier avec gestion des cli
 - **FastAPI** - Framework web moderne et rapide
 - **SQLAlchemy** - ORM pour la gestion de la base de données
 - **MySQL** - Base de données relationnelle
-- **JWT** - Authentification par token
+- **Firebase Admin SDK** - Vérification des tokens Firebase
 - **Pandas & NumPy** - Calculs de simulation
-- **Bcrypt** - Hachage des mots de passe
 
 ### Frontend
 - **React.js** - Bibliothèque JavaScript pour l'interface utilisateur
-- **Vite** - Build tool rapide
+- **Create React App** - Configuration React standard
+- **Firebase Authentication** - Authentification sécurisée
 - **Tailwind CSS** - Framework CSS utilitaire
 - **Axios** - Client HTTP pour les appels API
 - **React Router** - Navigation côté client
@@ -35,54 +35,39 @@ Application web complète de simulation de prêt immobilier avec gestion des cli
 
 ### Fonctionnalités principales
 
-1. **Authentification utilisateur**
+1. **🔐 Authentification Firebase**
    - Inscription avec email et mot de passe
-   - Connexion sécurisée avec JWT
-   - Protection des routes (seuls les utilisateurs authentifiés peuvent accéder aux simulations)
+   - Connexion sécurisée
+   - Gestion automatique de session
+   - Protection des routes
 
-2. **Simulation immobilière**
+2. **📊 Simulation immobilière**
    - Calcul de mensualité de prêt
-   - Paramètres personnalisables :
-     - Prix du bien
-     - Travaux
-     - Frais d'agence
-     - Durée du prêt
-     - Apport personnel
-     - Frais de notaire
-     - Taux d'intérêt
-     - Taux d'assurance
-     - Revalorisation du bien
-     - Date d'acquisition
-   - Résultats détaillés :
-     - Mensualité
-     - Total à financer
-     - Garantie bancaire
-     - Revenu minimum requis
-     - Tableau d'amortissement
-     - Projection de revente
+   - Paramètres personnalisables (prix, travaux, taux, etc.)
+   - Résultats détaillés en temps réel
+   - Tableau d'amortissement
+   - Projection de revente
 
-3. **Sauvegarde des simulations**
+3. **💾 Sauvegarde des simulations**
    - Enregistrement des simulations effectuées
    - Historique complet
    - Consultation des détails
 
 ### 🎁 Fonctionnalités BONUS (implémentées)
 
-4. **Gestion des clients**
+4. **👥 Gestion des clients**
    - Création de clients
    - Modification des informations
    - Suppression de clients
    - Liste de tous les clients
 
-5. **Attribution des simulations aux clients**
+5. **🔗 Attribution des simulations aux clients**
    - Association d'une simulation à un client
    - Filtrage des simulations par client
    - Visualisation du client associé
 
-6. **Design responsive**
-   - Interface adaptée pour desktop
-   - Interface adaptée pour tablette
-   - Interface adaptée pour mobile
+6. **📱 Design responsive**
+   - Interface adaptée pour desktop, tablette et mobile
 
 ## 📦 Prérequis
 
@@ -91,43 +76,40 @@ Avant de commencer, assurez-vous d'avoir installé :
 - **Python 3.9 ou supérieur**
 - **Node.js 18 ou supérieur**
 - **MySQL 8.0 ou supérieur**
-- **npm** ou **yarn**
+- **npm**
+- **Un compte Firebase** (gratuit)
 
 ## 🚀 Installation
 
 ### 1. Cloner le repository
 
-```bash
+\`\`\`bash
 git clone <votre-repository-url>
 cd Simulio
-```
+\`\`\`
 
 ### 2. Configuration de la base de données
 
 #### Créer la base de données MySQL
 
-```bash
+\`\`\`bash
 mysql -u root -p
-```
+\`\`\`
 
-```sql
+\`\`\`sql
 CREATE DATABASE simulio CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 exit;
-```
+\`\`\`
 
 #### Importer le script SQL
 
-```bash
+\`\`\`bash
 mysql -u root -p simulio < dump.sql
-```
-
-> Note: Le script `dump.sql` crée les tables et insère un utilisateur de test :
-> - Email: `test@simulio.com`
-> - Mot de passe: `password`
+\`\`\`
 
 ### 3. Installation du Backend
 
-```bash
+\`\`\`bash
 cd backend
 
 # Créer un environnement virtuel
@@ -144,35 +126,54 @@ pip install -r requirements.txt
 
 # Créer le fichier .env
 cp .env.example .env
-```
+\`\`\`
 
-#### Configuration du fichier `.env`
+#### Configuration du fichier \`.env\`
 
-Ouvrez le fichier `backend/.env` et configurez vos paramètres :
+Ouvrez le fichier \`backend/.env\` et configurez vos paramètres :
 
-```env
+\`\`\`env
 DATABASE_URL=mysql+pymysql://root:votre_mot_de_passe@localhost:3306/simulio
 SECRET_KEY=votre-cle-secrete-tres-longue-et-aleatoire
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
-```
-
-> ⚠️ **Important** : Changez la `SECRET_KEY` pour quelque chose de sécurisé en production !
+\`\`\`
 
 ### 4. Installation du Frontend
 
-```bash
+\`\`\`bash
 cd frontend
 
 # Installer les dépendances
 npm install
-```
+\`\`\`
+
+---
+
+## 🔥 Configuration Firebase
+
+### ⚠️ IMPORTANT : Cette étape est obligatoire
+
+L'application utilise **Firebase Authentication** pour gérer les utilisateurs.
+
+**👉 Suivez le guide complet de configuration :** [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
+
+### Résumé rapide :
+
+1. Créez un projet Firebase sur [console.firebase.google.com](https://console.firebase.google.com/)
+2. Activez l'authentification Email/Password
+3. Copiez la configuration dans \`frontend/src/services/firebase.js\`
+4. Téléchargez la clé de service et placez-la dans \`backend/firebase-service-account.json\`
+
+📖 **Guide détaillé avec captures d'écran :** [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
+
+---
 
 ## 🎯 Utilisation
 
 ### Démarrer le Backend
 
-```bash
+\`\`\`bash
 cd backend
 
 # Activer l'environnement virtuel si ce n'est pas déjà fait
@@ -182,31 +183,30 @@ venv\Scripts\activate  # Windows
 
 # Lancer le serveur
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+\`\`\`
 
-Le backend sera accessible sur : `http://localhost:8000`
+Le backend sera accessible sur : \`http://localhost:8000\`
 
-Documentation API interactive : `http://localhost:8000/docs`
+Documentation API interactive : \`http://localhost:8000/docs\`
 
 ### Démarrer le Frontend
 
 Dans un nouveau terminal :
 
-```bash
+\`\`\`bash
 cd frontend
 
 # Lancer le serveur de développement
-npm run dev
-```
+npm start
+\`\`\`
 
-Le frontend sera accessible sur : `http://localhost:3000`
+Le frontend sera accessible sur : \`http://localhost:3000\`
 
 ## 📱 Utilisation de l'application
 
 1. **Inscription / Connexion**
-   - Créez un compte ou utilisez le compte de test
-   - Email: `test@simulio.com`
-   - Mot de passe: `password`
+   - Créez un compte avec Firebase Authentication
+   - Vos données sont sécurisées
 
 2. **Créer des clients (BONUS)**
    - Allez dans "Mes Clients"
@@ -222,49 +222,52 @@ Le frontend sera accessible sur : `http://localhost:3000`
 4. **Consulter l'historique**
    - Allez dans "Mes Simulations"
    - Consultez toutes vos simulations enregistrées
-   - Filtrez par client
    - Visualisez les détails
 
 ## 🏗️ Architecture
 
-```
+\`\`\`
 Simulio/
 ├── backend/
 │   ├── app/
 │   │   ├── api/
 │   │   │   └── routes/
-│   │   │       ├── auth.py          # Routes d'authentification
-│   │   │       ├── clients.py       # Routes de gestion des clients
-│   │   │       └── simulations.py   # Routes de simulation
+│   │   │       ├── auth.py
+│   │   │       ├── clients.py
+│   │   │       └── simulations.py
 │   │   ├── core/
-│   │   │   ├── config.py           # Configuration de l'app
-│   │   │   └── security.py         # Gestion JWT et hachage
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── firebase_config.py     # 🔥 Config Firebase
 │   │   ├── db/
-│   │   │   ├── database.py         # Configuration SQLAlchemy
-│   │   │   └── models.py           # Modèles de données
+│   │   │   ├── database.py
+│   │   │   └── models.py
 │   │   ├── services/
-│   │   │   └── simulator.py       # Fonction de calcul de simulation
-│   │   └── main.py                 # Point d'entrée FastAPI
+│   │   │   └── simulator.py
+│   │   └── main.py
+│   ├── firebase-service-account.json  # 🔥 Clé Firebase (à créer)
 │   ├── requirements.txt
 │   └── .env.example
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── Login.jsx           # Page de connexion
-│   │   │   ├── Simulator.jsx       # Page du simulateur
-│   │   │   ├── Clients.jsx         # Gestion des clients
-│   │   │   └── Simulations.jsx     # Historique des simulations
+│   │   │   ├── Login.js
+│   │   │   ├── Simulator.js
+│   │   │   ├── Clients.js
+│   │   │   └── Simulations.js
 │   │   ├── services/
-│   │   │   ├── api.js              # Configuration Axios
-│   │   │   └── authContext.jsx     # Contexte d'authentification
-│   │   ├── App.jsx                 # Composant principal
-│   │   ├── main.jsx                # Point d'entrée React
-│   │   └── index.css               # Styles globaux
+│   │   │   ├── firebase.js           # 🔥 Config Firebase
+│   │   │   ├── api.js
+│   │   │   └── authContext.js        # 🔥 Gestion auth Firebase
+│   │   ├── App.js
+│   │   ├── index.js
+│   │   └── index.css
 │   ├── package.json
-│   └── vite.config.js
-├── dump.sql                        # Script SQL d'import
-└── README.md                       # Ce fichier
-```
+│   └── .env.example
+├── dump.sql
+├── FIREBASE_SETUP.md                  # 🔥 Guide Firebase
+└── README.md
+\`\`\`
 
 ## 📊 Fonctionnalités BONUS
 
@@ -285,127 +288,45 @@ Simulio/
    - Breakpoints pour tablettes et desktop
    - Interface fluide sur tous les appareils
 
-## 📚 API Documentation
-
-### Endpoints d'authentification
-
-#### POST `/api/auth/register`
-Inscription d'un nouvel utilisateur
-
-```json
-{
-  "name": "Jean Dupont",
-  "email": "jean@example.com",
-  "password": "motdepasse"
-}
-```
-
-#### POST `/api/auth/login`
-Connexion d'un utilisateur
-
-```json
-{
-  "email": "jean@example.com",
-  "password": "motdepasse"
-}
-```
-
-### Endpoints clients (authentification requise)
-
-#### GET `/api/clients/`
-Récupérer tous les clients de l'utilisateur
-
-#### POST `/api/clients/`
-Créer un nouveau client
-
-```json
-{
-  "name": "Marie Martin",
-  "email": "marie@example.com",
-  "phone": "0612345678"
-}
-```
-
-#### PUT `/api/clients/{client_id}`
-Modifier un client
-
-#### DELETE `/api/clients/{client_id}`
-Supprimer un client
-
-### Endpoints simulations (authentification requise)
-
-#### POST `/api/simulations/calculate`
-Calculer une simulation sans la sauvegarder
-
-```json
-{
-  "prix_bien": 200000,
-  "travaux": 10000,
-  "frais_agence": 3,
-  "duree_pret": 25,
-  "apport": 50000,
-  "frais_notaire": 7.5,
-  "taux_interet": 3.5,
-  "taux_assurance": 0.32,
-  "revalorisation_bien": 1,
-  "date_acquisition": "07/2025"
-}
-```
-
-#### POST `/api/simulations/`
-Créer et sauvegarder une simulation
-
-#### GET `/api/simulations/`
-Récupérer toutes les simulations
-
-#### GET `/api/simulations/{simulation_id}`
-Récupérer une simulation spécifique
-
-#### DELETE `/api/simulations/{simulation_id}`
-Supprimer une simulation
-
 ## 🔒 Sécurité
 
-- Mots de passe hachés avec bcrypt
-- Authentification JWT avec expiration
+- **Firebase Authentication** pour une sécurité maximale
+- Tokens Firebase vérifiés côté backend
+- Création automatique d'utilisateur dans la base de données
 - Protection CORS configurée
-- Validation des données côté serveur
-- Routes protégées par authentification
+- Routes API protégées
 
 ## 🐛 Dépannage
+
+### Erreur de connexion Firebase
+
+Consultez le guide : [FIREBASE_SETUP.md](./FIREBASE_SETUP.md)
 
 ### Erreur de connexion à la base de données
 
 Vérifiez que :
 - MySQL est bien démarré
-- Les identifiants dans `.env` sont corrects
-- La base de données `simulio` existe
+- Les identifiants dans \`.env\` sont corrects
+- La base de données \`simulio\` existe
 
 ### Le frontend ne se connecte pas au backend
 
 Vérifiez que :
 - Le backend tourne sur le port 8000
 - Le frontend tourne sur le port 3000
-- Les CORS sont bien configurés
-
-### Erreur lors de l'installation des dépendances Python
-
-Assurez-vous d'avoir Python 3.9+ :
-```bash
-python --version
-```
+- Firebase est bien configuré
 
 ## 📝 Notes
 
-- Cette application a été développée dans le cadre d'un test technique
-- Le design s'inspire de l'interface fournie dans `image_test/image.jpeg`
-- La fonction de calcul provient du fichier `image_test/test.py`
-- L'application est prête pour la production après quelques ajustements de sécurité
+- Cette application utilise **Firebase Authentication** pour la gestion des utilisateurs
+- Le backend vérifie les tokens Firebase et crée automatiquement les utilisateurs
+- Le design s'inspire de l'interface fournie dans \`image_test/image.jpeg\`
+- La fonction de calcul provient du fichier \`image_test/test.py\`
 
 ## 👨‍💻 Auteur
 
-Projet développé pour le test technique Simulio
+Projet développé pour le test technique Simulio avec intégration Firebase
 
 ---
 
-**Merci d'avoir consulté ce projet !** 🚀
+**Merci d'avoir consulté ce projet !** 🚀🔥

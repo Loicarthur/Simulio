@@ -70,22 +70,15 @@ export default function Clients() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary-700">Simulio</h1>
           <div className="flex items-center space-x-4">
             <span className="text-gray-700">Bonjour, {user?.name}</span>
-            <button
-              onClick={() => navigate('/simulator')}
-              className="btn-secondary"
-            >
+            <button onClick={() => navigate('/simulator')} className="btn-secondary">
               Simulateur
             </button>
-            <button
-              onClick={() => navigate('/simulations')}
-              className="btn-secondary"
-            >
+            <button onClick={() => navigate('/simulations')} className="btn-secondary">
               Mes Simulations
             </button>
             <button onClick={logout} className="btn-secondary">
@@ -95,7 +88,6 @@ export default function Clients() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800">Mes Clients</h2>
@@ -111,7 +103,6 @@ export default function Clients() {
           </button>
         </div>
 
-        {/* Liste des clients */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {clients.map((client) => (
             <div key={client.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
@@ -152,7 +143,6 @@ export default function Clients() {
         )}
       </main>
 
-      {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full">

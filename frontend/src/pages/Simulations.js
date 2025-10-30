@@ -56,22 +56,15 @@ export default function Simulations() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary-700">Simulio</h1>
           <div className="flex items-center space-x-4">
             <span className="text-gray-700">Bonjour, {user?.name}</span>
-            <button
-              onClick={() => navigate('/simulator')}
-              className="btn-secondary"
-            >
+            <button onClick={() => navigate('/simulator')} className="btn-secondary">
               Simulateur
             </button>
-            <button
-              onClick={() => navigate('/clients')}
-              className="btn-secondary"
-            >
+            <button onClick={() => navigate('/clients')} className="btn-secondary">
               Mes Clients
             </button>
             <button onClick={logout} className="btn-secondary">
@@ -81,19 +74,14 @@ export default function Simulations() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-800">Mes Simulations</h2>
-          <button
-            onClick={() => navigate('/simulator')}
-            className="btn-primary"
-          >
+          <button onClick={() => navigate('/simulator')} className="btn-primary">
             + Nouvelle simulation
           </button>
         </div>
 
-        {/* Liste des simulations */}
         <div className="space-y-4">
           {simulations.map((simulation) => (
             <div key={simulation.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
@@ -140,7 +128,6 @@ export default function Simulations() {
         )}
       </main>
 
-      {/* Modal détails */}
       {showModal && selectedSimulation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
           <div className="bg-white rounded-lg p-8 max-w-2xl w-full my-8">
@@ -152,7 +139,6 @@ export default function Simulations() {
               </div>
             )}
 
-            {/* Résultat principal */}
             <div className="bg-gray-100 rounded-lg p-6 mb-6 text-center">
               <p className="text-gray-600 text-lg mb-2">Mensualité</p>
               <p className="text-4xl font-bold text-primary-700">
@@ -160,7 +146,6 @@ export default function Simulations() {
               </p>
             </div>
 
-            {/* Paramètres */}
             <div className="mb-6">
               <h4 className="font-semibold text-lg mb-3">Paramètres du prêt</h4>
               <div className="grid grid-cols-2 gap-4">
@@ -191,7 +176,6 @@ export default function Simulations() {
               </div>
             </div>
 
-            {/* Frais */}
             <div className="mb-6">
               <h4 className="font-semibold text-lg mb-3">Frais et total</h4>
               <div className="space-y-2">
